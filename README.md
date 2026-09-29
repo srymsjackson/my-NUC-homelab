@@ -18,28 +18,16 @@ A single-node Proxmox homelab running on an Intel NUC in a college apartment, a 
 
 ```mermaid
 flowchart LR
-    Internet((Internet)) --- AP["Apartment Wi-Fi<br/>(client isolation on)"]
-    AP --- WIFI["USB Wi-Fi adapter"]
-
-    subgraph NUC["Intel NUC · Proxmox VE host"]
-        WIFI -- "NAT / MASQUERADE" --- BR["vmbr0<br/>10.10.10.1/24<br/>(standalone bridge)"]
-        BR --- LXC["LXC 100 · Debian 12<br/>10.10.10.151"]
-
-        subgraph DOCKER["Docker (inside LXC 100)"]
-            PH[Pi-hole]
-            PT[Portainer]
-            UK[Uptime Kuma]
-            HP[Homepage]
-            subgraph ARR["arrstack network"]
-                JF[Jellyfin]
-                JS[Jellyseerr]
-            end
-        end
-        LXC --- DOCKER
-    end
-
-    LAPTOP["Laptop"] -. "Tailscale (WireGuard)" .- LXC
-    LAPTOP -. "Tailscale" .- NUC
+    NET((Internet)) --- AP["Apartment Wi-Fi<br/>(client isolation)"]
+    AP --- WIFI["NUC: USB Wi-Fi adapter"]
+    WIFI -- "NAT" --- BR["Proxmox vmbr0 bridge<br/>10.10.10.1/24"]
+    BR --- LXC["LXC 100 (Debian 12)<br/>10.10.10.151<br/>Docker host"]
+    LXC --- PH[Pi-hole]
+    LXC --- PT[Portainer]
+    LXC --- UK[Uptime Kuma]
+    LXC --- HP[Homepage]
+    LXC --- JF["Jellyfin + Jellyseerr<br/>(arrstack network)"]
+    LAPTOP[Laptop] -. "Tailscale" .- LXC
 ```
 
 **Key points:**
