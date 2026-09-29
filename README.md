@@ -28,6 +28,7 @@ flowchart LR
     LXC --- HP[Homepage]
     LXC --- JF["Jellyfin + Jellyseerr<br/>(arrstack network)"]
     LAPTOP[Laptop] -. "Tailscale" .- LXC
+    PHONE[Phone] -. "Tailscale" .- LXC
 ```
 
 **Key points:**
